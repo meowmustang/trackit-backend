@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * =========================
+ * MASTER TABLES
+ * =========================
+ */
+
+model vendors {
+  vendor_id   Int    @id
+  vendor_name String
+
+  sessions fact_worker_sessions[]
+  workers  workers[]
+}
+
+model rooms {
+  room_id       String                 @id // FL15-RM1501
+  room_number   String
+  floor         Int
+  place_type    String // "gate" | "room"
+
+  @@map("rooms")
+  sessions fact_worker_sessions[]
+}
+
+/**
+ * =========================
+ * CORE ENTITIES
+ * =========================
+ */
+
+model workers {
+  worker_id    String   @id
+  worker_name  String
+  phone_number String   @unique
+  vendor_id    Int
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  photo_url    String?
+
+  sessions fact_worker_sessions[]
+  vendor   vendors                @relation(fields: [vendor_id], references: [vendor_id])
+}
+
+/**
+ * =========================
+ * EVENT LOGS (APPEND ONLY)
+ * =========================
+ */
+
+model event_logs {
+  event_id        String @id @default(uuid())
+  client_event_id String @unique
+
+  worker_id String
+  vendor_id Int
+  room_id   String
+  room_no   String?
+  floor_no  Int?
+
+  action     String
+  event_time DateTime
+  device_id  String?
+  synced_at  DateTime @default(now())
+
+  system_generated Boolean @default(false)
+
+  @@index([worker_id, event_time])
+  @@index([client_event_id])
+}
+
+model worker_current_state {
+  worker_id       String   @id
+  inside_building Boolean
+  active_room_id  String?
+  last_action     String
+  last_event_time DateTime
+  updated_at      DateTime @default(now())
+
+  @@index([last_event_time])
+}
+
+model fact_worker_sessions {
+  id        Int    @id @default(autoincrement())
+  worker_id String
+  vendor_id Int
+
+  room_id     String?
+  room_number String?
+  floor       Int?
+
+  work_date      DateTime
+  check_in_time  DateTime?
+  check_out_time DateTime?
+
+  // relations
+  worker       workers @relation(fields: [worker_id], references: [worker_id])
+  vendor       vendors @relation(fields: [vendor_id], references: [vendor_id])
+  rooms        rooms?  @relation(fields: [room_id], references: [room_id])
+
+  @@index([worker_id, work_date])
+  @@index([vendor_id, work_date])
+}
