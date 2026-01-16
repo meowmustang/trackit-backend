@@ -73,8 +73,7 @@ export class AuthService {
   }
 
   // 2️⃣ Public URL
-  const photoUrl =
-    `${process.env.SUPABASE_URL}/storage/v1/object/public/worker-photos/${filePath}`
+  const photoUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/worker-photos/${filePath}`
 
   // 3️⃣ Save worker
   const worker = await this.prisma.workers.create({

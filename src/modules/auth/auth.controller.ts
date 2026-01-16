@@ -8,6 +8,7 @@ import { JwtService } from "@nestjs/jwt"
 import { access } from "node:fs"
 
 
+
 @Controller("/labour/auth")
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly jwtService: JwtService) {}

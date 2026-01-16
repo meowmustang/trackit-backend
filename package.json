@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "nest build",
     "debug": "ls node_modules/@nestjs/cli/bin/",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -37,6 +37,7 @@
     "class-validator": "^0.14.3",
     "cookie-parser": "^1.4.7",
     "date-fns": "^4.1.0",
+    "express": "^5.2.1",
     "multer": "^2.0.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
