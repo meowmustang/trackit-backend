@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { LabourModule } from './modules/labours/labour.module';
 import { EventsModule } from './modules/events/events.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
