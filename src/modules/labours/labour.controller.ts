@@ -6,6 +6,7 @@ import {
   Req,
   Body,
   UseGuards,
+  Header,
 } from "@nestjs/common"
 import { JwtAuthGuard } from "../auth/jwt-auth.guard"
 import { LabourService } from "./labour.service"
@@ -31,7 +32,10 @@ export class LabourController {
 }
 
 @UseGuards(JwtAuthGuard)
-@Get("worker/current-state")
+@Get('worker/current-state')
+@Header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+@Header('Pragma', 'no-cache')
+@Header('Expires', '0')
 async getCurrentState(@Req() req) {
   const workerId = req.user.worker_id;
   
