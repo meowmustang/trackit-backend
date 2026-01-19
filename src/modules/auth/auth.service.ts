@@ -1,3 +1,4 @@
+import { ro } from 'date-fns/locale';
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { PrismaService } from "../../database/prisma.service"
 import { JwtService } from "@nestjs/jwt"
@@ -82,6 +83,7 @@ export class AuthService {
       worker_name: body.worker_name,
       phone_number: body.phone_number,
       vendor_id: Number(body.vendor_id),
+      role: body.role,
       photo_url: photoUrl, // ✅ now valid
     },
   })
