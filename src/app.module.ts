@@ -9,7 +9,6 @@ import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    AppController,
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     AuthModule,
@@ -17,5 +16,7 @@ import { AppController } from './app.controller';
     EventsModule,
     ScheduleModule.forRoot(),
   ],
+
+  controllers: [AppController],
 })
 export class AppModule {}
