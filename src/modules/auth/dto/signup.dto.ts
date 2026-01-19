@@ -1,12 +1,5 @@
-import { IsEnum, IsString, IsNumber, IsNotEmpty, Length } from "class-validator";
+import { IsEnum, IsString, IsNumber, IsNotEmpty, Length, isString } from "class-validator";
 import { Type } from "class-transformer";
-
-
-export enum WorkerRole {
-  SUPERVISOR = "SUPERVISOR",
-  TECHNICIAN = "TECHNICIAN",
-  HELPER = "HELPER",
-}
 
 export class SignupDto {
   @IsString()
@@ -26,8 +19,8 @@ export class SignupDto {
   @IsNumber()
   vendor_id: number;
 
-  @IsEnum(WorkerRole)
-  role: WorkerRole;
+  @IsString()
+  role: string;
 
 }
 
