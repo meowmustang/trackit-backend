@@ -1,4 +1,3 @@
-import { worker_current_state } from './../../../node_modules/.prisma/client/index.d';
 import {
   Controller,
   Get,
@@ -6,18 +5,13 @@ import {
   Req,
   Body,
   UseGuards,
-  Header,
 } from "@nestjs/common"
 import { JwtAuthGuard } from "../auth/jwt-auth.guard"
 import { LabourService } from "./labour.service"
-import { PrismaService } from "../../database/prisma.service"
 
 @Controller("/labour")
 export class LabourController {
-  constructor(
-    private readonly labourService: LabourService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly labourService: LabourService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get("me")
@@ -29,27 +23,6 @@ export class LabourController {
   @Get("activity/today")
   getTodayActivity(@Req() req) {
   return this.labourService.getTodayActivity(req.user.worker_id)
-}
-
-@UseGuards(JwtAuthGuard)
-@Get('worker/current-state')
-@Header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
-@Header('Pragma', 'no-cache')
-@Header('Expires', '0')
-async getCurrentState(@Req() req) {
-  const workerId = req.user.worker_id;
-  
-  const state = await this.prisma.worker_current_state.findUnique({
-    where: { worker_id: workerId },
-    select: {
-      inside_building: true,
-      active_room_id: true,
-    }
-  });
-  return{
-    inside_building: state?.inside_building ?? false,
-    active_room_id: state?.active_room_id ?? null,
-  }
 }
 
 @UseGuards(JwtAuthGuard)
