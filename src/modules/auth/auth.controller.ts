@@ -33,11 +33,12 @@ async login(
     await this.authService.login(dto)
 
   res.cookie('refresh_token', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    path: '/api/auth/refresh',
-  })
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  path: '/', // ✅ IMPORTANT
+});
+
 
   return { accessToken }
 }
@@ -70,7 +71,7 @@ async refresh(
   @Post('logout')
 logout(@Res({ passthrough: true }) res: Response) {
   res.clearCookie('refresh_token', {
-    path: '/api/auth/refresh',
+    path: '/',
   });
   return { success: true };
 }
