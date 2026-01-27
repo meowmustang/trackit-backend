@@ -9,7 +9,7 @@ import { AuthTestController } from './auth-test.controller';
 @Module({
   imports: [
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: process.env.JWT_ACCESS_SECRET,
       signOptions: {
         expiresIn: Number(process.env.JWT_EXPIRY),
       },
